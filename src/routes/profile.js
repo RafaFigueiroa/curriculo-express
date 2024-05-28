@@ -1,14 +1,19 @@
-import { v4 as uuid } from "uuid";
 import { Router } from "express";
 
 const router = Router();
+
+let id = 1;
+function geraId() {
+  id = id + 1;
+  return id;
+}
 
 router.get('/', (req, res) => {
     return res.send(Object.values(req.context.models.profiles));
 });
 
 router.post('/', (req, res) => {
-    const id = uuid();
+    const id = geraId();
     const profile = {
         id,
         name: req.body.name,
