@@ -55,11 +55,13 @@ let educations = {
 
 let certifications = {
     1: {
+        id: '1',
         name: "Desafio Globo 2.0 Rec'n'Play",
         issuingOrganization: "Globo",
         issueDate: "Outubro/2023"
     },
     2: {
+        id: '2',
         name: "JavaScript e HTML: desenvolva um jogo e pratique lógica de programação",
         issuingOrganization: "Alura",
         issueDate: "Abril/2023"
