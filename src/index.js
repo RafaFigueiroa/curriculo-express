@@ -19,6 +19,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/profiles', routes.profile);
+app.use('/experiences', routes.experience);
 
 app.listen(process.env.PORT, () => {
     console.log(`the app is listening on port ${process.env.PORT}`)

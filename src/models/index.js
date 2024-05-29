@@ -13,8 +13,9 @@ let profiles = {
     }
 }
 
-let professionalExperiences = {
+let experiences = {
     1: {
+        id: '1',
         position: "Desenvolvedor de software",
         company: "Combogó UNICAP",
         employmentType: "Aprendiz",
@@ -24,6 +25,7 @@ let professionalExperiences = {
         endDate: null
     },
     2: {
+        id: '2',
         position: "Residente de engenharia de software",
         company: "Porto Digital",
         employmentType: "Aprendiz",
@@ -66,7 +68,7 @@ let certifications = {
 
 export default {
     profiles,
-    professionalExperiences,
+    experiences,
     educations,
     certifications
 };
