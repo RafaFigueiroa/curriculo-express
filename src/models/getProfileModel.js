@@ -64,6 +64,20 @@ const getProfileModel = (sequelize, {DataTypes}) => {
         return profile;
     }
 
+    Profile.findByPk = async (pk) => {
+        let profile = await Profile.findOne({
+            where: { id: pk },
+        });
+
+        if(!profile) {
+            profile = await Profile.findOne({
+                where: { email: login },
+            });
+        }
+
+        return profile;
+    }
+
     return Profile;
 };
 

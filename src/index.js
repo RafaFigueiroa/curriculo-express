@@ -10,10 +10,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use((req, res, next) => {
+app.use( async (req, res, next) => {
     req.context = {
         models,
-        me: models.profiles[1]
+        me: await models.Profile.findByLogin('Rafael'),
     };
     next();
 });
@@ -22,6 +22,7 @@ app.use('/profiles', routes.profile);
 app.use('/experiences', routes.experience);
 app.use('/educations', routes.education);
 app.use('/certifications', routes.certification);
+app.use('/session', routes.session);
 
 const eraseDatabaseOnSync = process.env.ERASE_DATABASE_ON_SYNC === "true";
 
