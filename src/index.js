@@ -18,6 +18,10 @@ app.use( async (req, res, next) => {
     next();
 });
 
+app.get('/', (req, res) => {
+    return res.send("Bem vindo à API de currículos, rotas disponíveis: '/profiles', '/experiences', '/educations' e '/certifications'")
+})
+
 app.use('/profiles', routes.profile);
 app.use('/experiences', routes.experience);
 app.use('/educations', routes.education);
@@ -26,14 +30,15 @@ app.use('/session', routes.session);
 
 const eraseDatabaseOnSync = process.env.ERASE_DATABASE_ON_SYNC === "true";
 
+app.listen(process.env.PORT, () => {
+    console.log(`the app is listening on port ${process.env.PORT}`)
+});
+
 sequelize.sync({ force: eraseDatabaseOnSync }).then(() => {
     if(eraseDatabaseOnSync){
         createInitialProfile();
     }
 
-    app.listen(process.env.PORT, () => {
-        console.log(`the app is listening on port ${process.env.PORT}`)
-    });
 });
 
 const createInitialProfile = async () => {
