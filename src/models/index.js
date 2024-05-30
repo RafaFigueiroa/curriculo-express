@@ -11,6 +11,7 @@ const sequelize = new Sequelize(
     {
         dialect: 'postgres',
         host: process.env.POSTGRESQL_HOST,
+        dialectModule: require('pg'),
         dialectOptions: {
             ssl: true,
             sslmode: 'require'
