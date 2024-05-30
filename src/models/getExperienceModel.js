@@ -9,11 +9,37 @@ const getExperienceModel = (sequelize, {DataTypes}) => {
                 notEmpty: true,
             },
         },
+        company: {
+            type: DataTypes.STRING,
+        },
+        employmentType: {
+            type: DataTypes.STRING,
+        },
+        location: {
+            type: DataTypes.STRING,
+        },
+        modality: {
+            type: DataTypes.STRING,
+        },
+        startDate: {
+            type: DataTypes.STRING,
+        },
+        endDate: {
+            type: DataTypes.STRING,
+        },
     });
 
     Experience.associate = (models) => {
         Experience.belongsTo(models.Profile);
     };
+
+    Experience.findByPk = async (pk) => {
+        let experience = await Experience.findOne({
+            where: { id: pk },
+        });
+
+        return experience;
+    }
 
     return Experience;
 };

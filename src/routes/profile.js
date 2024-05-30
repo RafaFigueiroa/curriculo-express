@@ -8,11 +8,28 @@ function geraId() {
   return id;
 }
 
-router.get('/', (req, res) => {
-    return res.send(Object.values(req.context.models.profiles));
+router.get('/', async (req, res) => {
+    const profiles = await req.context.models.Profile.findAll();
+
+    if(!profiles){
+        return res.status(404).json("Nenhum perfil encontrado");
+    }
+
+    return res.status(200).json(profiles);
 });
 
-router.post('/', (req, res) => {
+router.get('/:id', async (req, res) => {
+    const id = req.params.id;
+    const profile = await req.context.models.Profile.findByPk(id);
+
+    if(!profile){
+        return res.status(404).json("Perfil não encontrado");
+    }
+
+    return res.status(200).json(profile);
+});
+
+router.post('/', async (req, res) => {
     const id = geraId();
     const profile = {
         id,
@@ -26,51 +43,47 @@ router.post('/', (req, res) => {
         github: req.body.github,
         linkedin: req.body.linkedin
     };
+    
+    await req.context.models.Profile.create(profile);
 
-    req.context.models.profiles[id] = profile;
-
-    return res.send(profile);
+    return res.status(201).json("Perfil criado");
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
     const id = req.params.id;
-    let profile = req.context.models.profiles[id];
 
-    if(!profile){
+    if(!req.context.models.Profile.findByPk(id)){
         return res.send("Perfil não encontrado");
     }
 
-    profile = {
-        id,
-        name: req.body.name,
-        lastName: req.body.lastName,
-        title: req.body.title,
-        about: req.body.about,
-        number: req.body.number,
-        location: req.body.location,
-        email: req.body.email,
-        github: req.body.github,
-        linkedin: req.body.linkedin
-    };
+    await req.context.models.Profile.update(
+        {
+            name: req.body.name,
+            lastName: req.body.lastName,
+            title: req.body.title,
+            about: req.body.about,
+            number: req.body.number,
+            location: req.body.location,
+            email: req.body.email,
+            github: req.body.github,
+            linkedin: req.body.linkedin
+        },
+        { where: { id }}
+    );
 
-    req.context.models.profiles[id] = profile;
-
-    return res.send(profile);
+    return res.status(202).json("Perfil atualizado");
 });
 
-router.delete('/:id', (req, res) => {
-    const{
-        [req.params.id]: profile,
-        ...otherProfiles
-    } = req.context.models.profiles;
-
-    if(!profile){
-        return res.send("Perfil não encontrado");
+router.delete('/:id', async (req, res) => {
+    const id = req.params.id;
+    
+    if(!req.context.models.Profile.findByPk(id)){
+        return res.status(404).json("Perfil não encontrado");
     }
 
-    req.context.models.profiles = otherProfiles;
+    await req.context.models.Profile.destroy({ where: { id } });
 
-    return res.send(profile);
+    return res.status(202).json("Perfil deletado");
 });
 
 export default router;

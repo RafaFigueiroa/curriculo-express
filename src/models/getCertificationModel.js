@@ -10,10 +10,24 @@ const getCertificationModel = (sequelize, {DataTypes}) => {
                 notEmpty: false
             },
         },
+        issuingOrganization: {
+            type: DataTypes.STRING,
+        },
+        issueDate: {
+            type: DataTypes.STRING,
+        },
     });
 
     Certification.associate = (models) => {
         Certification.belongsTo(models.Profile);
+    }
+
+    Certification.findByPk = async (pk) => {
+        let certification = await Certification.findOne({
+            where: { id: pk },
+        });
+
+        return certification;
     }
 
     return Certification;

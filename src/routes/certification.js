@@ -8,11 +8,28 @@ const geraId = () => {
     return id;
 }
 
-router.get('/', (req, res) => {
-    return res.send(Object.values(req.context.models.certifications));
+router.get('/', async (req, res) => {
+    const certifications = await req.context.models.Certification.findAll();
+
+    if(!certifications) {
+        return res.status(404).json("Nenhuma certificação encontrada")
+    }
+
+    return res.status(200).json(certifications);
 });
 
-router.post('/', (req, res) => {
+router.get('/:id', async (req, res) => {
+    const id = req.params.id;
+    const certification = await req.context.models.Certification.findByPK(id);
+
+    if(!certification) {
+        return res.status(404).json("Certificação não encontrada")
+    }
+
+    return res.status(200).json(certification);
+});
+
+router.post('/', async (req, res) => {
     const id = geraId();
     const certification = {
         id,
@@ -21,44 +38,40 @@ router.post('/', (req, res) => {
         issueDate: req.body.issueDate
     }
 
-    req.context.models.certifications[id] = certification;
+    await req.context.models.Certification.create(certification);
 
-    return res.send(certification);
+    return res.status(201).json(certification);
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
     const id = req.params.id;
-    let certification = req.context.models.certifications[id];
 
-    if(!certification) {
-        return res.send("Certificação não encontrada");
+    if(!req.context.models.Certification.findByPk(id)) {
+        return res.status(404).json("Certificação não encontrada");
     }
 
-    certification = {
-        id,
-        name: req.body.name,
-        issuingOrganization: req.body.issuingOrganization,
-        issueDate: req.body.issueDate
-    }
+    await req.context.models.Certification.update(
+        {
+            name: req.body.name,
+            issuingOrganization: req.body.issuingOrganization,
+            issueDate: req.body.issueDate
+        },
+        { where: { id }}
+    );
 
-    req.context.models.certifications[id] = certification;
-
-    return res.send(certification);
+    return res.status(202).json("Certificação atualizada");
 });
 
 router.delete('/:id', (req, res) => {
-    const {
-        [req.params.id]: certification,
-        ...otherCertifications
-    } = req.context.models.certifications
+    const id = req.params.id;
 
-    if(!certification) {
-        return res.send("Certificação não encontrada");
+    if(!req.context.models.Certification.findByPk(id)) {
+        return res.status(404).json("Certificação não encontrada");
     }
 
-    req.context.models.certifications = otherCertifications;
+    req.context.models.Certification.destroy({ where: { id }});
 
-    return res.send(certification);
-})
+    return res.status(202).json("Certificação deletada");
+});
 
 export default router;

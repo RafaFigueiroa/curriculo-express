@@ -69,12 +69,6 @@ const getProfileModel = (sequelize, {DataTypes}) => {
             where: { id: pk },
         });
 
-        if(!profile) {
-            profile = await Profile.findOne({
-                where: { email: login },
-            });
-        }
-
         return profile;
     }
 

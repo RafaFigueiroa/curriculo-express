@@ -70,18 +70,18 @@ const createInitialProfile = async () => {
             ],
             educations: [
                 {
-                    school: "UNICAP",
-                    degree: "Tecnólogo",
-                    course: "Sistemas para Internet",
-                    startDate: "Agosto/2022",
-                    endDate: "Dezembro/2024"
-                },
-                {
                     school: "ETE Cícero Dias",
                     degree: "Ensino médio e técnico",
                     course: "Programação de Jogos Digitais",
                     startDate: "Janeiro/2019",
                     endDate: "Dezembro/2021"
+                },
+                {
+                    school: "UNICAP",
+                    degree: "Tecnólogo",
+                    course: "Sistemas para Internet",
+                    startDate: "Agosto/2022",
+                    endDate: null
                 }
             ],
             certifications: [
