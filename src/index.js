@@ -30,15 +30,14 @@ app.use('/session', routes.session);
 
 const eraseDatabaseOnSync = process.env.ERASE_DATABASE_ON_SYNC === "true";
 
-app.listen(process.env.PORT, () => {
-    console.log(`the app is listening on port ${process.env.PORT}`)
-});
-
 sequelize.sync({ force: eraseDatabaseOnSync }).then(() => {
     if(eraseDatabaseOnSync){
         createInitialProfile();
     }
-
+    
+    app.listen(process.env.PORT, () => {
+        console.log(`the app is listening on port ${process.env.PORT}`)
+    });
 });
 
 const createInitialProfile = async () => {
